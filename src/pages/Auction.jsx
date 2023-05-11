@@ -29,7 +29,7 @@ function Auction() {
 
   const { isLoading, isError, data } = useQuery("posts", getPosts);
 
-  console.log(data);
+  // console.log(data);
 
   const handleChange = (event, value) => {
     setPage(value);
