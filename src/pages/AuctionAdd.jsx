@@ -1,5 +1,5 @@
 import React from "react";
-import { useNavigate } from "react-router-dom/dist";
+import { Navigate, useNavigate } from "react-router-dom/dist";
 import { useState, useEffect } from "react";
 import Button from "../components/Buttons/Button";
 import {
@@ -10,7 +10,7 @@ import {
   StFormInputs,
   StInput,
   Stbutton123,
-  DropdownList
+  DropdownList,
 } from "../styles/AuctionAdd.styles";
 import instance from "../axios/api";
 import { useCookies } from "react-cookie";
@@ -55,7 +55,14 @@ function AuctionAdd() {
   //   };
   // }, []);
   //드롭다운 클릭시 카테고리 변경
-  
+  const itemClickHandler = (item) => {
+    setProduct({
+      ...product,
+      category: item,
+    });
+    setIsOpen(false);
+  };
+
   //이동
   const nav = useNavigate();
   const HomeButton = () => {
@@ -70,6 +77,7 @@ function AuctionAdd() {
     minPrice: 0,
     deadline: timestring,
   });
+
   //상품 핸들러
   const productHandler = (e) => {
     const { name, value } = e.target;
@@ -87,25 +95,24 @@ function AuctionAdd() {
       product.minPrice.trim() === "" ||
       product.deadline.trim() === "" ||
       product.category.trim() === ""
-      )
+    )
       return alert("no");
-    await instance.post(
-      "/auction/add",
-      {
-        ...product,
-        title: product.title,
-        category: product.category,
-        content: product.content,
-        minPrice: product.minPrice,
-        deadline: product.deadline,
-      },
-      {
-        headers: {
-          Authorization: `Bearer ${token}`,
+      await instance.post(
+        "/auction/add",
+        {
+          ...product,
+          title: product.title,
+          category: product.category,
+          content: product.content,
+          minPrice: product.minPrice,
+          deadline: product.deadline,
         },
-      }
-    );
-  console.log(product)
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
     setProduct({
       title: "",
       category: "",
@@ -113,51 +120,43 @@ function AuctionAdd() {
       minPrice: "",
       deadline: "",
     });
-    nav("/auction");
+    Navigate('/auction')
   };
-  
-  const itemClickHandler = (item) => {
-    setProduct({
-      ...product,
-      category: item,
-    });
-    setIsOpen(false);
-  };
+
   return (
-    <Section 
+    <Section
     // ref={menuRef}
     >
       <StContainer display="flex">
-        <StForm
-          onSubmit={(e) => {
-            e.preventDefault();
-            productAddButton();
-          }}
-        >
+        <StForm>
           {/* Add Image Upload Field - TBD */}
           <StImgSection>
-            <img src="https://hips.hearstapps.com/hmg-prod/images/pringles-template-lightlysalted-1546635619.jpg?crop=1xw:1xh;center,top&resize=980:*"/>
+            <img src="https://hips.hearstapps.com/hmg-prod/images/pringles-template-lightlysalted-1546635619.jpg?crop=1xw:1xh;center,top&resize=980:*" />
           </StImgSection>
 
           <StFormSection>
             {/* Add Title Input */}
             <StFormInputs>
               <div>
-                <div onClick={() => setIsOpen(!isOpen)}>
-                  {selectedItem}
-                </div>
+                <div onClick={() => setIsOpen(!isOpen)}>{selectedItem}</div>
                 {isOpen && (
                   <DropdownList>
-                    <Stbutton123 onClick={() => itemClickHandler("가구/인테리어")}>
+                    <Stbutton123
+                      onClick={() => itemClickHandler("가구/인테리어")}
+                    >
                       가구/인테리어
                     </Stbutton123>
-                    <Stbutton123 onClick={() => itemClickHandler("패션의류/잡화")}>
+                    <Stbutton123
+                      onClick={() => itemClickHandler("패션의류/잡화")}
+                    >
                       패션의류/잡화
                     </Stbutton123>
                     <Stbutton123 onClick={() => itemClickHandler("전자제품")}>
                       전자제품
                     </Stbutton123>
-                    <Stbutton123 onClick={() => itemClickHandler("스포츠/레저")}>
+                    <Stbutton123
+                      onClick={() => itemClickHandler("스포츠/레저")}
+                    >
                       스포츠/레저
                     </Stbutton123>
                     <Stbutton123 onClick={() => itemClickHandler("기타")}>
@@ -172,7 +171,6 @@ function AuctionAdd() {
                   name="category"
                   value={product.category}
                   onChange={productHandler}
-                  style={{display:'none'}}
                 />
                 {product.category}
               </div>
@@ -214,7 +212,7 @@ function AuctionAdd() {
               </div>
             </StFormInputs>
 
-            <Button size="400px" height="50px">
+            <Button size="400px" height="50px" onClick={productAddButton}>
               제품등록 버튼
             </Button>
           </StFormSection>
