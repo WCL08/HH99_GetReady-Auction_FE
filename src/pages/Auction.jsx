@@ -31,7 +31,7 @@ function Auction() {
     getPosts(page)
   );
 
-  console.log(data);
+  // console.log(data);
 
   const handleChange = (event, value) => {
     setPage(value);

@@ -55,14 +55,7 @@ function AuctionAdd() {
   //   };
   // }, []);
   //드롭다운 클릭시 카테고리 변경
-  const itemClickHandler = (item) => {
-    setProduct({
-      ...product,
-      category: item,
-    });
-    setIsOpen(false);
-  };
-
+  
   //이동
   const nav = useNavigate();
   const HomeButton = () => {
@@ -94,8 +87,8 @@ function AuctionAdd() {
       product.minPrice.trim() === "" ||
       product.deadline.trim() === "" ||
       product.category.trim() === ""
-    )
-      // return alert("no");
+      )
+      return alert("no");
     await instance.post(
       "/auction/add",
       {
@@ -112,6 +105,7 @@ function AuctionAdd() {
         },
       }
     );
+  console.log(product)
     setProduct({
       title: "",
       category: "",
@@ -121,7 +115,14 @@ function AuctionAdd() {
     });
     nav("/auction");
   };
-
+  
+  const itemClickHandler = (item) => {
+    setProduct({
+      ...product,
+      category: item,
+    });
+    setIsOpen(false);
+  };
   return (
     <Section 
     // ref={menuRef}
